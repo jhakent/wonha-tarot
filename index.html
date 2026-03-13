@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>원하타로 | 맞춤형 1:1 타로 리딩 서비스</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+/* ─── Design Tokens ─── */
+:root{
+  /* Colors */
+  --navy:    #07090f;
+  --navy2:   #0c0f1e;
+  --navy3:   #111628;
+  --gold:    #c9a55c;
+  --gold-lt: #dfc07e;
+  --gold-dk: #7a6030;
+  --white:   #e8e0d0;
+  --body:    #c4bba8;
+  --muted:   #8a8270;
+
+  /* Spacing — 8px module */
+  --sp-4:  4px;
+  --sp-8:  8px;
+  --sp-16: 16px;
+  --sp-24: 24px;
+  --sp-32: 32px;
+  --sp-48: 48px;
+  --sp-64: 64px;
+  --sp-80: 80px;
+
+  /* Line-height scale */
+  --lh-tight:   1.1;
+  --lh-heading: 1.35;
+  --lh-body:    1.7;
+  --lh-loose:   1.9;
+
+  /* Container */
+  --container: 640px;
+  --page-gutter: 24px;
+}
+
+@media(max-width:640px){
+  :root{ --page-gutter: 28px; }
+}
+
+/* ─── Reset ─── */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+}
+
+html{ scroll-behavior:smooth; }
+
+body{
+  background:var(--navy);
+  color:var(--white);
+  font-family:'Pretendard',sans-serif;
+  font-weight:400;
+  letter-spacing:0;
+  line-height:var(--lh-body);
+  overflow-x:hidden;
+}
+
+/* Noise overlay — lowered z-index */
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.032'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:50;
+}
+
+/* ─── Stars ─── */
+#stars{ position:fixed; inset:0; pointer-events:none; z-index:0; }
+.star{
+  position:absolute;
+  background:var(--gold);
+  border-radius:50%;
+  animation:twinkle var(--d) ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{opacity:.12;transform:scale(1);}
+  50%{opacity:.85;transform:scale(1.5);}
+}
+
+/* ─── Layout Container ─── */
+.container{
+  max-width:var(--container);
+  margin:0 auto;
+  padding-left:var(--page-gutter);
+  padding-right:var(--page-gutter);
+}
+
+/* ─── Hero ─── */
+.hero{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:var(--sp-64) var(--page-gutter) var(--sp-32);
+  overflow:hidden;
+}
+.hero-glow{
+  position:absolute;
+  top:-60px;
+  left:50%;
+  transform:translateX(-50%);
+  width:500px;
+  height:500px;
+  background:radial-gradient(ellipse, rgba(25,35,80,0.55) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.title-card{
+  position:relative;
+  width:min(300px,78vw);
+  aspect-ratio:300/440;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  animation:fadeUp .9s ease both;
+}
+
+.title-card svg.arch{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+.card-inner{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.card-sub{
+  font-weight:400;
+  font-size:clamp(10px,2.8vw,13px);
+  letter-spacing:.18em;
+  line-height:1;
+  color:var(--gold);
+  margin-bottom:var(--sp-24);
+}
+
+.card-title-ko{
+  font-family:'Noto Serif KR',serif;
+  font-weight:900;
+  font-size:clamp(30px,10vw,52px);
+  color:var(--gold-lt);
+  letter-spacing:-.05em;
+  line-height:var(--lh-tight);
+  margin-bottom:var(--sp-16);
+}
+
+.card-title-en{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:500;
+  font-size:clamp(9px,2.4vw,12px);
+  letter-spacing:.35em;
+  line-height:1;
+  color:var(--gold);
+  opacity:.8;
+}
+
+.hero-copy{
+  position:relative;
+  z-index:1;
+  text-align:center;
+  margin-top:var(--sp-48);
+  animation:fadeUp .9s .2s ease both;
+}
+.hero-copy h1{
+  font-family:'Noto Serif KR',serif;
+  font-weight:900;
+  font-size:clamp(18px,4.2vw,34px);
+  color:var(--white);
+  line-height:var(--lh-heading);
+  letter-spacing:-.045em;
+}
+.hero-copy h1 span{ color:var(--gold); }
+.hero-copy p{
+  margin-top:var(--sp-16);
+  font-weight:300;
+  font-size:clamp(12px,1.7vw,14px);
+  color:var(--body);
+  letter-spacing:.02em;
+  line-height:var(--lh-body);
+}
+.gold-line{
+  width:36px;
+  height:1px;
+  background:var(--gold);
+  opacity:.4;
+  margin:var(--sp-32) auto 0;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(22px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ─── Buttons Grid ─── */
+.btns-section{
+  position:relative;
+  z-index:1;
+  padding-top:var(--sp-48);
+  padding-bottom:var(--sp-64);
+  animation:fadeUp .9s .35s ease both;
+}
+.btns-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.tarot-btn{
+  background:rgba(255,255,255,0.042);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:16px;
+  padding:var(--sp-24) var(--sp-24) 20px;
+  text-align:left;
+  cursor:pointer;
+  text-decoration:none;
+  display:block;
+  position:relative;
+  overflow:hidden;
+  transition:background .2s, border-color .2s, transform .2s, box-shadow .2s;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.tarot-btn::before{
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+}
+.tarot-btn:hover{
+  background:rgba(255,255,255,0.075);
+  border-color:rgba(201,165,92,0.42);
+  transform:translateY(-3px) scale(1.015);
+  box-shadow:0 8px 28px rgba(0,0,0,0.38), 0 0 14px rgba(201,165,92,0.07);
+}
+.btn-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:var(--sp-8);
+}
+.btn-icon{
+  width:34px;
+  height:34px;
+  border-radius:9px;
+  background:rgba(201,165,92,0.1);
+  border:1px solid rgba(201,165,92,0.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+  flex-shrink:0;
+  transition:background .2s;
+}
+.tarot-btn:hover .btn-icon{ background:rgba(201,165,92,0.18); }
+.btn-title{
+  font-weight:700;
+  font-size:15px;
+  color:var(--gold-lt);
+  letter-spacing:-.02em;
+  line-height:var(--lh-heading);
+}
+.btn-desc{
+  font-weight:400;
+  font-size:12.5px;
+  color:var(--body);
+  letter-spacing:.01em;
+  line-height:var(--lh-body);
+  margin-bottom:var(--sp-4);
+}
+.btn-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--sp-4);
+}
+.btn-tags span{
+  font-weight:400;
+  font-size:11px;
+  color:var(--gold);
+  letter-spacing:.02em;
+  background:rgba(201,165,92,0.08);
+  border:1px solid rgba(201,165,92,0.15);
+  border-radius:999px;
+  padding:2px 8px;
+  line-height:var(--lh-body);
+}
+.btn-arrow{
+  position:absolute;
+  right:15px;
+  top:24px;
+  color:var(--gold-dk);
+  font-size:13px;
+  transition:transform .2s, color .2s;
+}
+.tarot-btn:hover .btn-arrow{
+  transform:translateX(3px);
+  color:var(--gold);
+}
+
+/* ─── Trust / Value Proposition ─── */
+.trust{
+  position:relative;
+  z-index:1;
+  border-top:1px solid rgba(201,165,92,0.11);
+  border-bottom:1px solid rgba(201,165,92,0.11);
+  padding:var(--sp-64) var(--page-gutter);
+  text-align:center;
+}
+.trust-hook{
+  font-family:'Noto Serif KR',serif;
+  font-weight:700;
+  font-size:clamp(16px,3vw,22px);
+  color:var(--white);
+  line-height:var(--lh-heading);
+  letter-spacing:-.04em;
+  margin-bottom:var(--sp-32);
+  max-width:var(--container);
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.trust-features{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:var(--sp-16);
+  max-width:var(--container);
+  margin:0 auto var(--sp-32);
+}
+.trust-feature{
+  padding:var(--sp-24) var(--sp-16);
+  border:1px solid rgba(201,165,92,0.12);
+  border-radius:12px;
+  background:rgba(201,165,92,0.03);
+}
+.trust-feature-num{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;
+  font-size:clamp(22px,4vw,30px);
+  color:var(--gold-lt);
+  letter-spacing:-.03em;
+  line-height:var(--lh-tight);
+  margin-bottom:var(--sp-4);
+}
+.trust-feature-label{
+  font-weight:400;
+  font-size:12px;
+  color:var(--body);
+  letter-spacing:.02em;
+  line-height:var(--lh-body);
+}
+
+.trust-sub{
+  font-weight:300;
+  font-size:clamp(13px,1.8vw,14.5px);
+  color:var(--body);
+  line-height:var(--lh-loose);
+  letter-spacing:.01em;
+  max-width:var(--container);
+  margin:0 auto;
+}
+
+/* ─── How It Works ─── */
+.manual{
+  position:relative;
+  z-index:1;
+  padding-top:var(--sp-64);
+  padding-bottom:var(--sp-64);
+}
+.section-label{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:500;
+  font-size:11px;
+  letter-spacing:.4em;
+  color:var(--gold-dk);
+  text-transform:uppercase;
+  text-align:center;
+  margin-bottom:var(--sp-48);
+}
+.steps{ display:flex; flex-direction:column; }
+.step{
+  display:grid;
+  grid-template-columns:48px 1fr;
+  gap:var(--sp-16);
+  padding:var(--sp-24) 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.step:last-child{ border-bottom:none; }
+.step-num{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:400;
+  font-size:28px;
+  color:rgba(201,165,92,0.17);
+  line-height:var(--lh-tight);
+  padding-top:2px;
+}
+.step-title{
+  font-weight:600;
+  font-size:14px;
+  color:var(--gold-lt);
+  margin-bottom:var(--sp-4);
+  letter-spacing:-.02em;
+  line-height:var(--lh-heading);
+}
+.step-desc{
+  font-weight:300;
+  font-size:13px;
+  color:var(--body);
+  line-height:var(--lh-body);
+  letter-spacing:.01em;
+}
+.step-example{
+  margin-top:var(--sp-8);
+  padding:var(--sp-8) var(--sp-16);
+  border-left:2px solid var(--gold-dk);
+  background:rgba(201,165,92,0.04);
+  font-weight:300;
+  font-size:12px;
+  color:var(--muted);
+  line-height:var(--lh-loose);
+  letter-spacing:.01em;
+}
+
+/* ─── Pricing Hint ─── */
+.pricing{
+  position:relative;
+  z-index:1;
+  padding-top:var(--sp-48);
+  padding-bottom:var(--sp-64);
+}
+.pricing-inner{
+  border:1px solid rgba(201,165,92,0.15);
+  border-radius:16px;
+  padding:var(--sp-32) var(--sp-24);
+  background:rgba(201,165,92,0.03);
+  text-align:center;
+}
+.pricing-label{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:500;
+  font-size:11px;
+  letter-spacing:.4em;
+  color:var(--gold-dk);
+  text-transform:uppercase;
+  margin-bottom:var(--sp-24);
+}
+.pricing-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:var(--sp-16);
+  margin-bottom:var(--sp-24);
+}
+.pricing-card{
+  padding:var(--sp-24) var(--sp-16);
+  border:1px solid rgba(201,165,92,0.1);
+  border-radius:12px;
+  background:rgba(255,255,255,0.02);
+}
+.pricing-card-title{
+  font-weight:600;
+  font-size:13px;
+  color:var(--gold-lt);
+  letter-spacing:-.01em;
+  line-height:var(--lh-heading);
+  margin-bottom:var(--sp-4);
+}
+.pricing-card-price{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;
+  font-size:clamp(20px,4vw,26px);
+  color:var(--white);
+  letter-spacing:-.02em;
+  line-height:var(--lh-tight);
+  margin-bottom:var(--sp-4);
+}
+.pricing-card-unit{
+  font-weight:300;
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:.02em;
+}
+.pricing-note{
+  font-weight:300;
+  font-size:12px;
+  color:var(--muted);
+  letter-spacing:.02em;
+  line-height:var(--lh-body);
+}
+
+/* ─── CTA ─── */
+.cta{
+  position:relative;
+  z-index:1;
+  padding:var(--sp-64) var(--page-gutter) var(--sp-80);
+  text-align:center;
+}
+.cta-text{
+  font-family:'Noto Serif KR',serif;
+  font-weight:700;
+  font-size:clamp(18px,3.5vw,26px);
+  color:var(--white);
+  margin-bottom:var(--sp-8);
+  line-height:var(--lh-heading);
+  letter-spacing:-.04em;
+}
+.cta-sub-text{
+  font-weight:300;
+  font-size:clamp(13px,1.6vw,14px);
+  color:var(--body);
+  margin-bottom:var(--sp-32);
+  line-height:var(--lh-body);
+  letter-spacing:.01em;
+}
+.cta-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:var(--sp-8);
+  border:1px solid var(--gold);
+  color:var(--gold-lt);
+  padding:14px 40px;
+  font-weight:500;
+  font-size:14px;
+  letter-spacing:.06em;
+  cursor:pointer;
+  border-radius:999px;
+  background:rgba(201,165,92,0.06);
+  transition:background .25s, color .25s, box-shadow .25s;
+  text-decoration:none;
+  backdrop-filter:blur(8px);
+}
+.cta-btn:hover{
+  background:var(--gold);
+  color:var(--navy);
+  box-shadow:0 0 22px rgba(201,165,92,0.28);
+}
+.cta-note{
+  margin-top:var(--sp-16);
+  font-weight:300;
+  font-size:12px;
+  color:var(--muted);
+  letter-spacing:.03em;
+}
+
+/* ─── Footer ─── */
+footer{
+  position:relative;
+  z-index:1;
+  border-top:1px solid rgba(201,165,92,0.09);
+  padding:var(--sp-48) var(--page-gutter);
+  text-align:center;
+}
+.footer-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:500;
+  font-size:clamp(15px,2.5vw,18px);
+  letter-spacing:.22em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:var(--sp-8);
+}
+.footer-copy{
+  font-weight:300;
+  font-size:11px;
+  letter-spacing:.06em;
+  color:var(--muted);
+  margin-bottom:var(--sp-24);
+}
+.footer-sns{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:var(--sp-24);
+}
+.sns-btn{
+  width:34px;
+  height:34px;
+  border:1px solid rgba(201,165,92,0.2);
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  text-decoration:none;
+  transition:border-color .2s, color .2s, background .2s;
+  font-size:15px;
+}
+.sns-btn:hover{
+  border-color:var(--gold);
+  color:var(--gold-lt);
+  background:rgba(201,165,92,0.07);
+}
+.sns-btn svg{ width:15px; height:15px; fill:currentColor; }
+.footer-divider{ width:1px; height:16px; background:rgba(201,165,92,0.15); }
+.family-link{
+  font-weight:400;
+  font-size:11px;
+  letter-spacing:.04em;
+  color:var(--muted);
+  text-decoration:none;
+  border-bottom:1px solid rgba(201,165,92,0.2);
+  padding-bottom:1px;
+  transition:color .2s, border-color .2s;
+}
+.family-link:hover{
+  color:var(--gold-lt);
+  border-color:var(--gold);
+}
+
+/* ─── Responsive ─── */
+@media(max-width:480px){
+  .btns-grid{ grid-template-columns:1fr; }
+  .trust-features{ grid-template-columns:1fr; gap:var(--sp-8); }
+  .pricing-row{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<!-- ─── Hero ─── -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="title-card">
+    <svg class="arch" viewBox="0 0 300 440" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="vbar" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#c9a55c" stop-opacity="0"/>
+          <stop offset="30%"  stop-color="#c9a55c" stop-opacity="1"/>
+          <stop offset="70%"  stop-color="#c9a55c" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#c9a55c" stop-opacity="0"/>
+        </linearGradient>
+        <style>
+          .spin-top{
+            transform-origin:150px 18px;
+            animation:spinOrbit 12s linear infinite;
+          }
+          @keyframes spinOrbit{
+            from{transform:rotate(0deg);}
+            to{transform:rotate(360deg);}
+          }
+        </style>
+      </defs>
+      <rect x="18" y="18" width="264" height="404" rx="52" ry="52" stroke="#c9a55c" stroke-width="1" stroke-opacity=".5" fill="none"/>
+      <rect x="28" y="28" width="244" height="384" rx="44" ry="44" stroke="#c9a55c" stroke-width=".4" stroke-opacity=".14" fill="none"/>
+      <rect x="18" y="148" width="7" height="144" fill="url(#vbar)"/>
+      <rect x="275" y="148" width="7" height="144" fill="url(#vbar)" opacity=".85"/>
+      <ellipse cx="150" cy="18" rx="56" ry="13" stroke="#c9a55c" stroke-width=".65" stroke-opacity=".28" fill="none"/>
+      <circle cx="150" cy="18" r="13" fill="#b8894a" opacity=".82"/>
+      <circle cx="150" cy="18" r="13" stroke="#c9a55c" stroke-width=".7" stroke-opacity=".4" fill="none"/>
+      <g class="spin-top">
+        <circle cx="206" cy="18" r="4.5" fill="#c9a55c" opacity=".75"/>
+        <circle cx="94"  cy="18" r="2.8" fill="#c9a55c" opacity=".4"/>
+      </g>
+      <circle cx="150" cy="422" r="11" fill="#b8894a" opacity=".72"/>
+      <circle cx="150" cy="422" r="11" stroke="#c9a55c" stroke-width=".6" stroke-opacity=".35" fill="none"/>
+      <circle cx="150" cy="422" r="6.5" stroke="#c9a55c" stroke-width=".4" stroke-opacity=".2" fill="none"/>
+      <circle cx="288" cy="200" r="8" fill="#b8894a" opacity=".65"/>
+      <circle cx="288" cy="200" r="8" stroke="#c9a55c" stroke-width=".5" stroke-opacity=".3" fill="none"/>
+      <circle cx="12" cy="268" r="7" fill="#b8894a" opacity=".58"/>
+      <circle cx="12" cy="268" r="7" stroke="#c9a55c" stroke-width=".5" stroke-opacity=".25" fill="none"/>
+      <line x1="56"  y1="152" x2="118" y2="152" stroke="#c9a55c" stroke-width=".65" stroke-opacity=".38"/>
+      <circle cx="150" cy="152" r="2" fill="none" stroke="#c9a55c" stroke-width=".7" stroke-opacity=".5"/>
+      <circle cx="150" cy="152" r=".8" fill="#c9a55c" fill-opacity=".6"/>
+      <line x1="182" y1="152" x2="244" y2="152" stroke="#c9a55c" stroke-width=".65" stroke-opacity=".38"/>
+      <line x1="60"  y1="308" x2="118" y2="308" stroke="#c9a55c" stroke-width=".55" stroke-opacity=".28"/>
+      <circle cx="150" cy="308" r="1.8" fill="#c9a55c" fill-opacity=".38"/>
+      <line x1="182" y1="308" x2="240" y2="308" stroke="#c9a55c" stroke-width=".55" stroke-opacity=".28"/>
+      <g stroke="#c9a55c" stroke-opacity=".5">
+        <line x1="232" y1="88" x2="232" y2="78" stroke-width=".85"/>
+        <line x1="227" y1="83" x2="237" y2="83" stroke-width=".85"/>
+        <line x1="70"  y1="346" x2="70"  y2="338" stroke-width=".75"/>
+        <line x1="65"  y1="342" x2="75"  y2="342" stroke-width=".75"/>
+      </g>
+      <g fill="#c9a55c" fill-opacity=".32">
+        <circle cx="88"  cy="74"  r="1.1"/>
+        <circle cx="62"  cy="176" r="1"/>
+        <circle cx="240" cy="242" r=".9"/>
+        <circle cx="106" cy="355" r="1"/>
+      </g>
+    </svg>
+
+    <div class="card-inner">
+      <p class="card-sub">원하는대로, 원하타로</p>
+      <h1 class="card-title-ko">원하타로</h1>
+      <p class="card-title-en">WONHA TAROT</p>
+    </div>
+  </div>
+
+  <div class="hero-copy">
+    <h1>당신의 이야기를,<br><span>타로로 읽어드립니다.</span></h1>
+    <p>온라인 · 오프라인 선택 가능 &nbsp;|&nbsp; 맞춤형 1:1 실시간 리딩</p>
+    <div class="gold-line"></div>
+  </div>
+</section>
+
+<!-- ─── Category Buttons ─── -->
+<section class="btns-section container">
+  <div class="btns-grid">
+    <a class="tarot-btn" href="#">
+      <div class="btn-top">
+        <span class="btn-icon">❤️</span>
+        <span class="btn-title">인연 타로</span>
+      </div>
+      <p class="btn-desc">마음이 향하는 곳의 흐름을 읽습니다.</p>
+      <div class="btn-tags">
+        <span>연애</span><span>썸</span><span>재회</span><span>결혼</span><span>짝사랑</span>
+      </div>
+      <span class="btn-arrow">→</span>
+    </a>
+    <a class="tarot-btn" href="#">
+      <div class="btn-top">
+        <span class="btn-icon">💼</span>
+        <span class="btn-title">현생 타로</span>
+      </div>
+      <p class="btn-desc">일과 관계, 현실의 방향을 짚어드립니다.</p>
+      <div class="btn-tags">
+        <span>직장</span><span>인간관계</span><span>금전</span>
+      </div>
+      <span class="btn-arrow">→</span>
+    </a>
+    <a class="tarot-btn" href="#">
+      <div class="btn-top">
+        <span class="btn-icon">🌟</span>
+        <span class="btn-title">덕생 타로</span>
+      </div>
+      <p class="btn-desc">최애와 나 사이, 그 에너지를 읽습니다.</p>
+      <div class="btn-tags">
+        <span>팬덤</span><span>최애 감정</span><span>덕질 관계</span>
+      </div>
+      <span class="btn-arrow">→</span>
+    </a>
+    <a class="tarot-btn" href="#">
+      <div class="btn-top">
+        <span class="btn-icon">🎭</span>
+        <span class="btn-title">서사 타로</span>
+      </div>
+      <p class="btn-desc">세계관 속 관계와 이야기를 해석합니다.</p>
+      <div class="btn-tags">
+        <span>TRPG</span><span>세계관</span><span>캐릭터 관계</span>
+      </div>
+      <span class="btn-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- ─── Trust ─── -->
+<section class="trust">
+  <p class="trust-hook">지금 이 순간,<br>마음에 담아둔 고민이 있나요?</p>
+
+  <div class="trust-features">
+    <div class="trust-feature">
+      <p class="trust-feature-num">1:1</p>
+      <p class="trust-feature-label">전문 타로사 직접 리딩</p>
+    </div>
+    <div class="trust-feature">
+      <p class="trust-feature-num">1000+</p>
+      <p class="trust-feature-label">누적 리딩 세션</p>
+    </div>
+    <div class="trust-feature">
+      <p class="trust-feature-num">99.8%</p>
+      <p class="trust-feature-label">의뢰인 만족도</p>
+    </div>
+  </div>
+
+  <p class="trust-sub">
+    카드가 보여주는 당신의 이야기를<br>
+    의뢰 내용에 최적화된 방향으로 해석해드립니다.
+  </p>
+</section>
+
+<!-- ─── How It Works ─── -->
+<section class="manual container">
+  <p class="section-label">How It Works</p>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <div>
+        <p class="step-title">카테고리 선택</p>
+        <p class="step-desc">지금 가장 중요한 이야기를 고르세요.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <div>
+        <p class="step-title">질문 & 방식 선택</p>
+        <p class="step-desc">궁금한 내용을 작성하고, 리딩 방식을 선택하세요.</p>
+        <div class="step-example">
+          온라인 비대면 — 화상 · 채팅 실시간 리딩<br>
+          오프라인 대면 — 직접 방문 1:1 리딩
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <div>
+        <p class="step-title">예약 & 결제</p>
+        <p class="step-desc">원하는 일정에 예약 후 결제를 진행합니다.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <div>
+        <p class="step-title">실시간 리딩</p>
+        <p class="step-desc">예약 시간에 전문 타로사가 직접 카드를 펼쳐 실시간으로 해석해드립니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Pricing ─── -->
+<section class="pricing container">
+  <div class="pricing-inner">
+    <p class="pricing-label">Pricing</p>
+    <div class="pricing-row">
+      <div class="pricing-card">
+        <p class="pricing-card-title">온라인 리딩</p>
+        <p class="pricing-card-price">₩30,000~</p>
+        <p class="pricing-card-unit">30분 기준</p>
+      </div>
+      <div class="pricing-card">
+        <p class="pricing-card-title">오프라인 리딩</p>
+        <p class="pricing-card-price">₩50,000~</p>
+        <p class="pricing-card-unit">40분 기준</p>
+      </div>
+    </div>
+    <p class="pricing-note">카테고리 · 질문 수에 따라 달라질 수 있습니다.</p>
+  </div>
+</section>
+
+<!-- ─── CTA ─── -->
+<section class="cta">
+  <p class="cta-text">카드 한 장에 담긴<br>당신만의 이야기.</p>
+  <p class="cta-sub-text">첫 리딩 후기를 남기면 다음 리딩 10% 할인.</p>
+  <a href="#" class="cta-btn">🔮 &nbsp;리딩 예약하기</a>
+  <p class="cta-note">온라인 · 오프라인 선택 가능 &nbsp;·&nbsp; 예약 즉시 확정</p>
+</section>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <p class="footer-brand">Wonha Tarot</p>
+  <p class="footer-copy">ⓒ 2025 JHAK Entertainment Inc. All Rights Reserved.</p>
+  <div class="footer-sns">
+    <a class="sns-btn" href="#" aria-label="X">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      </svg>
+    </a>
+    <a class="sns-btn" href="#" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+    </a>
+    <a class="sns-btn" href="#" aria-label="Naver Blog">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/>
+      </svg>
+    </a>
+    <div class="footer-divider"></div>
+    <a class="family-link" href="https://jhakentertainment.com" target="_blank" rel="noopener">JHAK Entertainment ↗</a>
+  </div>
+</footer>
+
+<script>
+const el=document.getElementById('stars');
+for(let i=0;i<50;i++){
+  const s=document.createElement('div');
+  s.classList.add('star');
+  const sz=Math.random()*1.6+0.7;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${2.5+Math.random()*4}s;animation-delay:${Math.random()*5}s;`;
+  el.appendChild(s);
+}
+</script>
+</body>
+</html>
